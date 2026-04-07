@@ -24,12 +24,19 @@ namespace API_store.Controllers
 
         // GET: api/product
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetAll()
+        public async Task<ActionResult<IEnumerable<ProductDTO>>> Get(int pageNumber = 1, int pageSize = 10)
         {
-            var products = await _repository.GetAll();
+            var products = await _repository.GetPage(pageNumber, pageSize);
+
             var productsDTO = _mapper.Map<IEnumerable<ProductDTO>>(products);
-            return Ok(productsDTO);
+
+            var count = await _repository.Count();
+            var pages = (int)Math.Ceiling(count / (double)pageSize);
+
+            var apiresp = new APIResponse<ProductDTO>(productsDTO, count, pageNumber, pageSize);
+            return Ok(apiresp);
         }
+
 
         // GET: api/product/{id}
         [HttpGet("{id}")]

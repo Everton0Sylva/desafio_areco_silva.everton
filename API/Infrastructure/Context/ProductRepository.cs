@@ -35,7 +35,18 @@ namespace Infrastructure.Context
                 await _context.SaveChangesAsync();
             }
         }
+        public async Task<IEnumerable<Product>> GetPage(int pageNumber, int pageSize)
+        {
+            return await _context.Product
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+        }
 
-        public async Task<IEnumerable<Product>> GetAll() => await _context.Product.ToListAsync();
+        public async Task<int> Count()
+        {
+            return await _context.Product.CountAsync();
+        }
+
     }
 }
