@@ -1,0 +1,9 @@
+<div class="header-container" [ngClass]="isDark ? 'dark-shadow' : ''">
+  <img src="https://areco.com.br/wp-content/uploads/2025/12/arcos.webp" alt="Logo" class="logo" />
+  <span class="header-title">Desafio Areco</span>
+ <a href="https://github.com/Everton0Sylva" target="_blank" rel="noopener" class="header-subtitle">Desenvolvido por Everton da Silva</a>
+
+   <span class="change-theme" [ngClass]="isDark ? 'dark-shadow' : ''" (click)="toggleTheme()">
+    <span class="fa-solid fa-fw" [ngClass]="isDark ? 'fa-moon' : 'fa-sun'"></span></span>
+
+</div>

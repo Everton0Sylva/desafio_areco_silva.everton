@@ -1,1 +1,49 @@
-/* You can add global styles to this file, and also import other style files */
+
+@font-face {
+  font-family: 'Quantico';
+  src: url('./assets/font/Quantico/Quantico-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Quantico';
+  src: url('./assets/font/Quantico/Quantico-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Quantico';
+  src: url('./assets/font/Quantico/Quantico-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Quantico';
+  src: url('./assets/font/Quantico/Quantico-BoldItalic.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+}
+
+body {
+  font-family: 'Quantico';
+  font-weight: normal;
+}
+
+:root {
+  --bg: #eeeeee;
+  --text: #212129;
+}
+
+.dark-theme {
+  --bg: #0b0f1a;
+  --text: #e9ecef;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+}
+
