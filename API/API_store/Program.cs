@@ -3,6 +3,7 @@ using Domain.Interfaces;
 using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Text.Json;
 
 namespace API_store
 {
@@ -11,6 +12,11 @@ namespace API_store
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddRouting(options =>
+            {
+                options.LowercaseUrls = true;
+            });
 
             // Swagger
             builder.Services.AddEndpointsApiExplorer();
@@ -21,7 +27,11 @@ namespace API_store
 
 
             // Controllers
-            builder.Services.AddControllers();
+            builder.Services.AddControllers()
+                .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+            });
 
             builder.Services.AddAutoMapper(cfg => cfg.AddProfile<Mapping>());
 
@@ -39,6 +49,14 @@ namespace API_store
 
             app.UseHttpsRedirection();
             app.MapControllers();
+
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseCors(policy => policy
+                    .AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod());
+            }
 
             app.Run();
         }
