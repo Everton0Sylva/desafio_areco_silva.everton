@@ -1,4 +1,13 @@
-<div class="d-flex">
-  <areco-header [isDark]="isDark"></areco-header>
-  <areco-sidebar [isDark]="isDark"></areco-sidebar>
+<div class="container-fluid">
+  <div class="row flex-nowrap m-0 p-0 g-0">
+    <div class="col-sm-5 col-md-3 col-lg-2">
+      <areco-sidebar [isDark]="isDark"></areco-sidebar>
+    </div>
+    <div class="col-sm-7 col-md-9 col-lg-10 d-flex flex-column align-content-stretch">
+      <areco-header [isDark]="isDark"></areco-header>
+      <div class="h-100 w-100">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
 </div>

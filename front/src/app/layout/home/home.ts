@@ -4,14 +4,16 @@ import { ThemeService } from '../../core/services/theme.service';
 import { CommonModule } from '@angular/common';
 import { Sidebar } from './sidebar/sidebar';
 import { Subject, takeUntil } from 'rxjs';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'areco-home',
   imports: [
     Header,
     CommonModule,
-    Sidebar
-  ],
+    Sidebar,
+    RouterOutlet
+],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
