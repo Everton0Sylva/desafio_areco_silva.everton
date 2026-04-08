@@ -1,0 +1,39 @@
+<table class="table table-striped">
+  <thead class="table-light">
+    <tr>
+      <th
+        *ngFor="let col of columns"
+        [style.width]="col.width"
+        (click)="col.sortable ? toggleSort(col.key) : null"
+        style="cursor: pointer"
+      >
+        {{ col.header }}
+        <small *ngIf="col.sortable" class="text-muted ms-2">
+          <span *ngIf="sortState.column === col.key && sortState.direction === 'asc'">▲</span>
+          <span *ngIf="sortState.column === col.key && sortState.direction === 'desc'">▼</span>
+        </small>
+      </th>
+      <th style="width: 140px">Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let row of pageItems">
+      <td *ngFor="let col of columns">{{ row[col.key] }}</td>
+
+      <td>
+        <button class="btn btn-sm btn-outline-primary me-1" (click)="emitAction('edit', row)">
+          Editar
+        </button>
+        <button class="btn btn-sm btn-outline-danger" (click)="emitAction('delete', row)">
+          Excluir
+        </button>
+      </td>
+    </tr>
+  </tbody>
+
+  <tbody>
+    <tr>
+      <th scope="row">1</th>
+    </tr>
+  </tbody>
+</table>

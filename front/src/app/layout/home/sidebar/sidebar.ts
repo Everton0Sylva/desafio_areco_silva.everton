@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { ThemeService } from '../../../core/services/theme.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'areco-sidebar',
@@ -11,22 +12,13 @@ import { ThemeService } from '../../../core/services/theme.service';
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.scss',
 })
-export class Sidebar implements OnInit, OnDestroy {
-  isDark = false;
-  private destroy$ = new Subject<void>();
+export class Sidebar {
+  @Input() isDark: boolean = false;
 
-  constructor(private themeService: ThemeService) { }
 
-  ngOnInit(): void {
-    this.themeService.isDark$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(value => {
-        this.isDark = value;
-      });
-  }
+  constructor(private router: Router) { }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+  goTo(path: string) {
+    this.router.navigate([path]);
   }
 }
