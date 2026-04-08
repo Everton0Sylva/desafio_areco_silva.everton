@@ -26,6 +26,13 @@ yarn-error.log*
 .next/
 out/
 
+.front/.angular/
+/front/.angular/
+.angular/*
+.angular/
+*.log
+
 .DS_Store
 Thumbs.db
 desktop.ini
+*.db-*

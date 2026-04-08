@@ -16,8 +16,8 @@ export class ProductService {
 
   constructor(private http: HttpClient) { }
 
-  getProducts(page: number, pageSize: number) {
-    this.http.get<IProduct[]>(`${this.base}?page=${page}&size=${pageSize}`).subscribe(list => {
+  getProducts(page: number, pageSize: number) {   //api/Product?pageNumber=1&pageSize=10'
+    this.http.get<IProduct[]>(`${this.base}?pageNumber=${page}&pageSize=${pageSize}`).subscribe(list => {
       this._products$.next(list);
     });
   }
