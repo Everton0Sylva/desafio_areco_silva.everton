@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { ThemeService } from '../../../core/services/theme.service';
 import { CommonModule } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
@@ -11,19 +11,11 @@ import { Subject, takeUntil } from 'rxjs';
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })
-export class Header implements OnInit, OnDestroy {
-  isDark = false;
+export class Header implements OnDestroy {
+ @Input() isDark: boolean = false;
   private destroy$ = new Subject<void>();
 
-  constructor(private themeService: ThemeService) { }
-
-  ngOnInit(): void {
-    this.themeService.isDark$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(value => {
-        this.isDark = value;
-      });
-  }
+  private themeService = inject(ThemeService);
 
   toggleTheme(): void {
     this.themeService.toggle();
