@@ -4,34 +4,43 @@ import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
 import { ITableAction } from '../../interface/itable-action';
 import { ITableColumn } from '../../interface/itable-column';
 import { ITableSort } from '../../interface/itable-sort';
+import { CurrPipe } from '../../../shared/pipes/currpipe.pipe';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { IRestResponse } from '../../interface/irestresponse';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'areco-table',
   imports: [
-    CommonModule
+    CommonModule,
+    FormsModule,
+    CurrPipe,
+    PaginationModule
   ],
   templateUrl: './table.html',
   styleUrl: './table.scss',
 })
 export class Table<T> {
-  @Input() items: T[] = [];
+  @Input() restResp: IRestResponse<T> = {
+    data: [],
+    pageNumber: 1,
+    pageSize: 10,
+    totalCount: 0,
+    totalPages: 1
+  };
   @Input() columns: ITableColumn[] = [];
   @Input() pageSize = 10;
   sort = { column: 'name', direction: '' as '' | 'asc' | 'desc' };
   page = { index: 0, size: 5 };
 
 
-
-  currentPage = 0;
-  currentPageSize = this.pageSize;
-  selected = new Set<T>();
   sortState: ITableSort = { column: '', direction: '' };
 
-  get total() { return this.items?.length ?? 0; }
-  get totalPages() { return Math.max(1, Math.ceil(this.total / this.currentPageSize)); }
+  get total() { return this.restResp?.totalCount ?? 0; }
+  get totalPages() { return this.restResp?.totalPages ?? Math.max(1, Math.ceil(this.total / this.restResp?.pageSize)); }
+
   get pageItems() {
-    const start = this.currentPage * this.currentPageSize;
-    return (this.items ?? []).slice(start, start + this.currentPageSize) as IRow[];
+    return this.restResp?.data as IRow[];
   }
 
   toggleSort(column: string) {
@@ -46,6 +55,10 @@ export class Table<T> {
   // ações
   emitAction(type: string, row: IRow) {
     // this.action.emit({ type, row });
+  }
+
+  pageChanged(event: any): void {
+    // this.currentPage = event.page;
   }
 }
 

@@ -7,6 +7,7 @@ import { IProduct } from '../../../core/interface/iproduct';
 import { RouterLink } from "@angular/router";
 import { ThemeService } from '../../../core/services/theme.service';
 import { CommonModule } from '@angular/common';
+import { IRestResponse } from '../../../core/interface/irestresponse';
 
 @Component({
   selector: 'areco-list',
@@ -19,17 +20,23 @@ import { CommonModule } from '@angular/common';
   styleUrl: './list.scss',
 })
 export class List implements OnInit {
-  dataList: WritableSignal<IProduct[]> = signal([]);
+  dataList: WritableSignal<IRestResponse<IProduct>> = signal({
+    data: [],
+    pageNumber: 1,
+    pageSize: 10,
+    totalCount: 0,
+    totalPages: 1
+  });
   isDark = signal(false);
   private destroy$ = new Subject<void>();
   private themeService = inject(ThemeService);
 
 
   columns: ITableColumn[] = [
-    { key: 'Name', header: 'Nome', sortable: true },
-    { key: 'Description', header: 'Descrição', sortable: true },
-    { key: 'price', header: 'Preço', sortable: false },
-    { key: 'Quantity', header: 'Estoque', sortable: false },
+    { key: 'name', header: 'Nome', sortable: true },
+    { key: 'description', header: 'Descrição', sortable: true },
+    { key: 'price', header: 'Preço', sortable: false, obs: 'currency' },
+    { key: 'quantity', header: 'Estoque', sortable: false },
   ];
 
   private productService = inject(ProductService);
