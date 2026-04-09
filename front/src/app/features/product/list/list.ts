@@ -71,6 +71,7 @@ export class List implements OnInit {
       this.notificationService.confirm("Exclusão", "Deseja realmente deletar este produto?").then(confirmed => {
         if (confirmed) {
           this.productService.deleteProduct(id)
+            .pipe(takeUntil(this.destroy$))
             .subscribe({
               next: () => {
                 that.toastr.success('Produto Deletado com sucesso!', 'Sucesso!');

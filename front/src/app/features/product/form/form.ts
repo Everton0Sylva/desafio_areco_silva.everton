@@ -6,6 +6,7 @@ import { NgxMaskDirective } from 'ngx-mask';
 import { ProductService } from '../../../core/services/product.service';
 import { Product } from '../../../core/model/product';
 import { ToastrService } from 'ngx-toastr';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'areco-form',
@@ -40,6 +41,9 @@ export class Form {
   }
 
 
+  private destroy$ = new Subject<void>();
+
+
   ngOnInit(): void {
     this.route.params.subscribe((params: any) => {
       this.id = params['id'];
@@ -67,6 +71,7 @@ export class Form {
         let product = new Product(formData);
         product.Id = this.id;
         this.productService.updateProduct(this.id, product)
+          .pipe(takeUntil(this.destroy$))
           .subscribe({
             next: () => {
               that.toastr.success('Produto atualizado com sucesso!', 'Sucesso!');
@@ -78,6 +83,7 @@ export class Form {
       } else {
         let product = new Product(formData);
         this.productService.createProduct(product)
+          .pipe(takeUntil(this.destroy$))
           .subscribe({
             next: () => {
               that.toastr.success('Produto criado com sucesso!', 'Sucesso!');
@@ -98,4 +104,8 @@ export class Form {
     }
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }
