@@ -81,8 +81,7 @@ export class Form {
             }
           })
       } else {
-        let product = new Product(formData);
-        this.productService.createProduct(product)
+        this.productService.createProduct(formData)
           .pipe(takeUntil(this.destroy$))
           .subscribe({
             next: () => {
