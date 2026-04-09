@@ -1,4 +1,4 @@
 export const environment = {
-  production: true,
-  apiUrl: 'https://api.areco.com'
+  production: false,
+  apiUrl: 'http://localhost:5008'
 };
