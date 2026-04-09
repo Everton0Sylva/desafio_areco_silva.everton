@@ -8,6 +8,7 @@ import { CurrPipe } from '../../../shared/pipes/currpipe.pipe';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { IRestResponse } from '../../interface/irestresponse';
 import { FormsModule } from '@angular/forms';
+import { TableSearch } from '../../../shared/components/table-search/table-search';
 
 @Component({
   selector: 'areco-table',
@@ -15,7 +16,8 @@ import { FormsModule } from '@angular/forms';
     CommonModule,
     FormsModule,
     CurrPipe,
-    PaginationModule
+    PaginationModule,
+    TableSearch
   ],
   templateUrl: './table.html',
   styleUrl: './table.scss',
@@ -29,7 +31,6 @@ export class Table<T> {
     totalPages: 1
   };
   @Input() columns: ITableColumn[] = [];
-  @Input() pageSize = 10;
   sort = { column: 'name', direction: '' as '' | 'asc' | 'desc' };
   page = { index: 0, size: 5 };
 
