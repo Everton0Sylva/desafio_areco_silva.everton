@@ -4,17 +4,26 @@ import { ITableColumn } from '../../../core/interface/itable-column';
 import { ProductService } from '../../../core/services/product.service';
 import { Table } from '../../../core/components/table/table';
 import { IProduct } from '../../../core/interface/iproduct';
+import { RouterLink } from "@angular/router";
+import { ThemeService } from '../../../core/services/theme.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'areco-list',
   imports: [
-    Table
+    Table,
+    RouterLink,
+    CommonModule
   ],
   templateUrl: './list.html',
   styleUrl: './list.scss',
 })
 export class List implements OnInit {
-  dataList: WritableSignal<IProduct[]> = signal(<IProduct[]>[]);
+  dataList: WritableSignal<IProduct[]> = signal([]);
+  isDark = signal(false);
+  private destroy$ = new Subject<void>();
+  private themeService = inject(ThemeService);
+
 
   columns: ITableColumn[] = [
     { key: 'Name', header: 'Nome', sortable: true },
@@ -26,6 +35,13 @@ export class List implements OnInit {
   private productService = inject(ProductService);
 
   ngOnInit() {
+    this.themeService.isDark$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(value => {
+        this.isDark.set(value);
+      });
+
+
     this.productService.getProducts(1, 10);
 
     this.productService.products$.subscribe(list => {
@@ -49,5 +65,10 @@ export class List implements OnInit {
     if (ev.type === 'delete') this.productService.delete(ev.row.id).subscribe(() => this.computeView());
     if (ev.type === 'edit') this.router.navigate(['/produtos', ev.row.id]);
   }*/
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
 }

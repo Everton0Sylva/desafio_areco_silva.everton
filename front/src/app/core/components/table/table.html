@@ -29,11 +29,8 @@
         </button>
       </td>
     </tr>
-  </tbody>
-
-  <tbody>
-    <tr>
-      <th scope="row">1</th>
+    <tr *ngIf="!items || items.length === 0">
+      <td [attr.colspan]="columns.length + 1" class="text-center no-records">Nenhum registro encontrado!</td>
     </tr>
   </tbody>
 </table>

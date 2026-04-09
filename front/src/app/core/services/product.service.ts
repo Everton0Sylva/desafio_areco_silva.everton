@@ -12,7 +12,7 @@ export class ProductService {
   private _products$ = new BehaviorSubject<Product[]>([])
   products$ = this._products$.asObservable();
 
-  private base = `${environment.apiUrl}/api/products`;
+  private base = `${environment.apiUrl}/api/product`;
 
   constructor(private http: HttpClient) { }
 

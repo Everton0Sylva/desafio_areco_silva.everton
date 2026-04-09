@@ -1,4 +1,3 @@
-
 @font-face {
   font-family: 'Quantico';
   src: url('./assets/font/Quantico/Quantico-Regular.ttf') format('truetype');
@@ -47,3 +46,17 @@ body {
   color: var(--text);
 }
 
+.page-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+
+  i {
+    margin-right: 2rem;
+  }
+}
+
+.btn {
+  i {
+    margin-left: 0.35rem;
+  }
+}

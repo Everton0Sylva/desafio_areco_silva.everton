@@ -1,13 +1,13 @@
-<div class="container-fluid">
-  <div class="row flex-nowrap m-0 p-0 g-0">
-    <div class="col-sm-5 col-md-3 col-lg-2">
+<div class="container-fluid p-0">
+  <div class="row g-0">
+    <div class="col-md-3 col-lg-2 g-0 vh-100">
       <areco-sidebar [isDark]="isDark"></areco-sidebar>
     </div>
-    <div class="col-sm-7 col-md-9 col-lg-10 d-flex flex-column align-content-stretch">
+    <main class="col-md-9 col-lg-10 d-flex flex-column g-0 vh-100">
       <areco-header [isDark]="isDark"></areco-header>
-      <div class="h-100 w-100">
+      <div class="p-3 overflow-x-hidden">
         <router-outlet></router-outlet>
       </div>
-    </div>
+    </main>
   </div>
 </div>

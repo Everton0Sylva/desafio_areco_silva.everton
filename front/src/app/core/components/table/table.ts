@@ -31,7 +31,7 @@ export class Table<T> {
   get totalPages() { return Math.max(1, Math.ceil(this.total / this.currentPageSize)); }
   get pageItems() {
     const start = this.currentPage * this.currentPageSize;
-    return (this.items || []).slice(start, start + this.currentPageSize) as IRow[];
+    return (this.items ?? []).slice(start, start + this.currentPageSize) as IRow[];
   }
 
   toggleSort(column: string) {
