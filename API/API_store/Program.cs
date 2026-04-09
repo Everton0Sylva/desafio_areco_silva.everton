@@ -44,10 +44,8 @@ namespace API_store
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "API Store v1");
-                c.RoutePrefix = string.Empty; // <- deixa o Swagger na raiz "/"
             });
 
-            app.UseHttpsRedirection();
             app.MapControllers();
 
             if (app.Environment.IsDevelopment())
@@ -56,6 +54,10 @@ namespace API_store
                     .AllowAnyOrigin()
                     .AllowAnyHeader()
                     .AllowAnyMethod());
+            }
+            else
+            {
+                app.UseHttpsRedirection();
             }
 
             app.Run();
