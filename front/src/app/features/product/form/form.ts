@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgxMaskDirective } from 'ngx-mask';
 import { ProductService } from '../../../core/services/product.service';
 import { Product } from '../../../core/model/product';
@@ -27,14 +27,15 @@ export class Form {
   private route: ActivatedRoute = inject(ActivatedRoute);
 
   constructor(
+    private router: Router,
     private fb: FormBuilder,
     private productService: ProductService,
     private toastr: ToastrService) {
     this.form = this.fb.group({
-      name: ['Teste de Produto II', Validators.required],
-      price: [29.25, Validators.required],
-      quantity: [50, Validators.required],
-      description: ['Descrição do Produto de Teste']
+      name: [null, Validators.required],
+      price: [null, Validators.required],
+      quantity: [null, Validators.required],
+      description: [null]
     });
   }
 
@@ -42,6 +43,17 @@ export class Form {
   ngOnInit(): void {
     this.route.params.subscribe((params: any) => {
       this.id = params['id'];
+
+      if (this.id) {
+        this.productService.getProductById(this.id).subscribe({
+          next: (product) => {
+            this.form.patchValue(product);
+          }, error: (err) => {
+            console.log(err);
+            this.toastr.error('Erro ao carregar Produto!', 'Falha!');
+          }
+        })
+      }
     })
   }
 
@@ -50,13 +62,22 @@ export class Form {
       this.form.markAllAsTouched();
     } else {
       const formData = this.form.value;
+      let that = this;
       if (this.id) {
-
-        console.log('Criando novo produto:', formData);
-      } else {
-        let that = this;
         let product = new Product(formData);
-        this.productService.createProduct(formData)
+        product.Id = this.id;
+        this.productService.updateProduct(this.id, product)
+          .subscribe({
+            next: () => {
+              that.toastr.success('Produto atualizado com sucesso!', 'Sucesso!');
+            }, error: (err: any) => {
+              that.toastr.error('Erro ao atualizar Produto!', 'Falha!');
+              console.log(err);
+            }
+          })
+      } else {
+        let product = new Product(formData);
+        this.productService.createProduct(product)
           .subscribe({
             next: () => {
               that.toastr.success('Produto criado com sucesso!', 'Sucesso!');
@@ -70,7 +91,11 @@ export class Form {
   }
 
   onCancel() {
-    debugger
+    if (this.id) {
+      this.router.navigate(['../../'], { relativeTo: this.route });
+    } else {
+      this.router.navigate(['../'], { relativeTo: this.route });
+    }
   }
 
 }

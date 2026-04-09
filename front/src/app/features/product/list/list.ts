@@ -4,7 +4,7 @@ import { ITableColumn } from '../../../core/interface/itable-column';
 import { ProductService } from '../../../core/services/product.service';
 import { Table } from '../../../core/components/table/table';
 import { IProduct } from '../../../core/interface/iproduct';
-import { RouterLink } from "@angular/router";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { ThemeService } from '../../../core/services/theme.service';
 import { CommonModule } from '@angular/common';
 import { IRestResponse } from '../../../core/interface/irestresponse';
@@ -40,6 +40,8 @@ export class List implements OnInit {
   ];
 
   private productService = inject(ProductService);
+  private router = inject(Router);
+  private route: ActivatedRoute = inject(ActivatedRoute);
 
   ngOnInit() {
     this.themeService.isDark$
@@ -55,23 +57,15 @@ export class List implements OnInit {
       this.dataList.set(list);
     });
   }
-  /*
-  computeView() {
-    const search = this.searchTerm?.toLowerCase() ?? '';
-    let filtered = this.all.filter(p => p.name.toLowerCase().includes(search) || (p.sku ?? '').toLowerCase().includes(search));
-    // aplicar sort se necessário
-    const start = this.page.index * this.page.size;
-    this.view = { total: filtered.length, data: filtered.slice(start, start + this.page.size) };
-  }
 
-  onSearch(term: string) { this.searchTerm = term; this.page.index = 0; this.computeView(); }
-  onPageChange(i: number) { this.page.index = i; this.computeView(); }
-  onPageSizeChange(s: number) { this.page.size = Number(s); this.page.index = 0; this.computeView(); }
-  onSort(ev: SortEvent) { /* aplicar sort no this.all e computeView()  }
-  onAction(ev: ActionEvent<Product>) {
-    if (ev.type === 'delete') this.productService.delete(ev.row.id).subscribe(() => this.computeView());
-    if (ev.type === 'edit') this.router.navigate(['/produtos', ev.row.id]);
-  }*/
+  action(type: string, row: any) {
+    if (type === 'delete') {
+      this.productService.deleteProduct(row.id);
+    } else if (type === 'edit') {
+      let id = row?.id;
+      if (id) this.router.navigate(['./edit', id], { relativeTo: this.route });
+    }
+  }
 
   ngOnDestroy(): void {
     this.destroy$.next();

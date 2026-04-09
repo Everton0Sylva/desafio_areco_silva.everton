@@ -1,6 +1,7 @@
 <div class="d-flex flex-column">
   <div class="page-title">
-    <i class="fa-brands fa-rebel"></i>{{ id ? 'Editar' : 'Novo' }} Produto
+    <i class="fa-brands" [ngClass]="id ? 'fa-empire' : 'fa-rebel'"></i
+    >{{ id ? 'Editar' : 'Novo' }} Produto
   </div>
   <form [formGroup]="form" (ngSubmit)="onSubmit()" class="row mt-3">
     <div class="form-floating mb-3 col-md-9 col-sm-12">

@@ -1,54 +1,55 @@
 <div class="d-flex flex-column g-0">
-  <areco-table-search></areco-table-search>
-<table class="table table-striped">
-  <thead class="table-light">
-    <tr>
-      <th
-        *ngFor="let col of columns"
-        (click)="col.sortable ? toggleSort(col.key) : null"
-        style="cursor: pointer"
-      >
-        {{ col.header }}
-        <small *ngIf="col.sortable" class="text-muted ms-2">
-          <span *ngIf="sortState.column === col.key && sortState.direction === 'asc'">▲</span>
-          <span *ngIf="sortState.column === col.key && sortState.direction === 'desc'">▼</span>
-        </small>
-      </th>
-      <th style="width: 140px">Ações</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let row of pageItems">
-      <td *ngFor="let col of columns">
-        @if (col.obs === 'currency') {
-          {{ row[col.key] | currPipe }}
-        } @else {
-          {{ row[col.key] }}
-        }
-      </td>
+  <table class="table table-striped">
+    <thead class="table-light">
+      <tr>
+        <th
+          *ngFor="let col of columns"
+          (click)="col.sortable ? toggleSort(col.key) : null"
+          style="cursor: pointer"
+        >
+          {{ col.header }}
+          <small *ngIf="col.sortable" class="text-muted ms-2">
+            <span *ngIf="sortState.column === col.key && sortState.direction === 'asc'">▲</span>
+            <span *ngIf="sortState.column === col.key && sortState.direction === 'desc'">▼</span>
+          </small>
+        </th>
+        <th style="width: 100px"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of pageItems">
+        <td *ngFor="let col of columns">
+          @if (col.obs === 'currency') {
+            {{ row[col.key] | currPipe }}
+          } @else {
+            {{ row[col.key] }}
+          }
+        </td>
 
-      <td>
-        <button class="btn btn-sm btn-outline-primary me-1" (click)="emitAction('edit', row)">
-          Editar
-        </button>
-        <button class="btn btn-sm btn-outline-danger" (click)="emitAction('delete', row)">
-          Excluir
-        </button>
-      </td>
-    </tr>
-    <tr *ngIf="!pageItems || pageItems.length === 0">
-      <td [attr.colspan]="columns.length + 1" class="text-center no-records">
-        Nenhum registro encontrado!
-      </td>
-    </tr>
-  </tbody>
-</table>
+        <td>
+          <span class="action-btn text-success-emphasis" (click)="emitAction('edit', row)">
+            <i class="fa-solid fa-square-pen"></i>
+          </span>
+          <span class="action-btn text-danger" (click)="emitAction('delete', row)">
+            <i class="fa-solid fa-circle-xmark"></i>
+          </span>
+        </td>
+      </tr>
+      <tr *ngIf="!pageItems || pageItems.length === 0">
+        <td [attr.colspan]="columns.length + 1" class="text-center no-records">
+          Nenhum registro encontrado!
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
-<pagination
-  [totalItems]="total"
-  [(ngModel)]="restResp.pageNumber"
-  [itemsPerPage]="restResp.pageSize"
-  (pageChanged)="pageChanged($event)"
-  previousText="&lsaquo;" nextText="&rsaquo;"
->
-</pagination>
+  <pagination
+    [totalItems]="total"
+    [(ngModel)]="restResp.pageNumber"
+    [itemsPerPage]="restResp.pageSize"
+    (pageChanged)="pageChanged($event)"
+    previousText="&lsaquo;"
+    nextText="&rsaquo;"
+  >
+  </pagination>
+</div>

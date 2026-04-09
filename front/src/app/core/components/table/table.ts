@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, signal } from '@angular/core';
+import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
 import { ITableAction } from '../../interface/itable-action';
 import { ITableColumn } from '../../interface/itable-column';
@@ -8,7 +8,6 @@ import { CurrPipe } from '../../../shared/pipes/currpipe.pipe';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { IRestResponse } from '../../interface/irestresponse';
 import { FormsModule } from '@angular/forms';
-import { TableSearch } from '../../../shared/components/table-search/table-search';
 
 @Component({
   selector: 'areco-table',
@@ -17,7 +16,6 @@ import { TableSearch } from '../../../shared/components/table-search/table-searc
     FormsModule,
     CurrPipe,
     PaginationModule,
-    TableSearch
   ],
   templateUrl: './table.html',
   styleUrl: './table.scss',
@@ -31,6 +29,9 @@ export class Table<T> {
     totalPages: 1
   };
   @Input() columns: ITableColumn[] = [];
+
+  @Output() action = new EventEmitter();
+
   sort = { column: 'name', direction: '' as '' | 'asc' | 'desc' };
   page = { index: 0, size: 5 };
 
@@ -55,7 +56,8 @@ export class Table<T> {
 
   // ações
   emitAction(type: string, row: IRow) {
-    // this.action.emit({ type, row });
+    this.action.emit({ type, row });
+
   }
 
   pageChanged(event: any): void {
