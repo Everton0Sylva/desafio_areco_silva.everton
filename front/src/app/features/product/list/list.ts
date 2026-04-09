@@ -8,6 +8,8 @@ import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { ThemeService } from '../../../core/services/theme.service';
 import { CommonModule } from '@angular/common';
 import { IRestResponse } from '../../../core/interface/irestresponse';
+import { ToastrService } from 'ngx-toastr';
+import { NotificationService } from '../../../shared/services/notification.service';
 
 @Component({
   selector: 'areco-list',
@@ -43,6 +45,10 @@ export class List implements OnInit {
   private router = inject(Router);
   private route: ActivatedRoute = inject(ActivatedRoute);
 
+  private toastr: ToastrService = inject(ToastrService);
+
+  private notificationService: NotificationService = inject(NotificationService);
+
   ngOnInit() {
     this.themeService.isDark$
       .pipe(takeUntil(this.destroy$))
@@ -51,7 +57,7 @@ export class List implements OnInit {
       });
 
 
-    this.productService.getProducts(1, 10);
+    this.getProductsList(1);
 
     this.productService.products$.subscribe(list => {
       this.dataList.set(list);
@@ -59,12 +65,29 @@ export class List implements OnInit {
   }
 
   action(type: string, row: any) {
+    let id = row?.id;
     if (type === 'delete') {
-      this.productService.deleteProduct(row.id);
+      let that = this;
+      this.notificationService.confirm("Exclusão", "Deseja realmente deletar este produto?").then(confirmed => {
+        if (confirmed) {
+          this.productService.deleteProduct(id)
+            .subscribe({
+              next: () => {
+                that.toastr.success('Produto Deletado com sucesso!', 'Sucesso!');
+                that.getProductsList(1);
+              }, error: (err: any) => {
+                that.toastr.error('Erro ao deletar Produto!', 'Falha!');
+                console.log(err);
+              }
+            })
+        }
+      })
     } else if (type === 'edit') {
-      let id = row?.id;
       if (id) this.router.navigate(['./edit', id], { relativeTo: this.route });
     }
+  }
+  getProductsList(page: number) {
+    this.productService.getProducts(page, 10);
   }
 
   ngOnDestroy(): void {

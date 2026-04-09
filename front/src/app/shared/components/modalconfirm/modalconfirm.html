@@ -1,0 +1,12 @@
+<div class="modal-header">
+  <h4 class="modal-title pull-left">{{ title }}</h4>
+</div>
+<div class="modal-body">
+  <div class="text-center-3">
+    {{ message }}
+    <div class="d-flex flex-row justify-content-center gap-3 mt-2">
+      <button type="button" class="btn btn-success" (click)="confirm()">Sim</button>
+      <button type="button" class="btn btn-danger" (click)="decline()">Não</button>
+    </div>
+  </div>
+</div>

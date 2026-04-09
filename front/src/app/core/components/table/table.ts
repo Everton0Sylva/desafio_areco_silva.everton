@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
-import { ITableAction } from '../../interface/itable-action';
 import { ITableColumn } from '../../interface/itable-column';
 import { ITableSort } from '../../interface/itable-sort';
 import { CurrPipe } from '../../../shared/pipes/currpipe.pipe';
@@ -31,6 +30,7 @@ export class Table<T> {
   @Input() columns: ITableColumn[] = [];
 
   @Output() action = new EventEmitter();
+  @Output() pageChange = new EventEmitter();
 
   sort = { column: 'name', direction: '' as '' | 'asc' | 'desc' };
   page = { index: 0, size: 5 };
@@ -61,7 +61,7 @@ export class Table<T> {
   }
 
   pageChanged(event: any): void {
-    // this.currentPage = event.page;
+    this.pageChange.emit(event.page);
   }
 }
 

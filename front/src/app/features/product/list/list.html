@@ -16,6 +16,7 @@
       [restResp]="dataList()"
       [columns]="columns"
       (action)="action($event.type, $event.row)"
+      (pageChange)="getProductsList($event)"
     ></areco-table>
   </div>
 </div>
